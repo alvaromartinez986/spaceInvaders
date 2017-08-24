@@ -9,7 +9,7 @@ export class GameSpace {
     constructor(ctx) {
         this.ctx = ctx;
         this.gameSize = 350;
-        this.player = new Ship("assets/ship.png", this.ctx, this.gameSize, 40, 310);
+        //this.player = new Ship("assets/ship.png", this.ctx, this.gameSize, 40, 310);
         this.invader = [];
         this.createInvaders();
     }

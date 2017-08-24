@@ -1,51 +1,36 @@
-export class Alien {
-    constructor(source, ctx, gameSize, x, y) {
-        this.img = new Image();
-        this.ctx = ctx;
-        this.src = source;
+import {
+    GameObject
+} from './gameObject'
 
-        this.gameSize = gameSize;
-        this.height = (100 / gameSize) * 100;
-        this.width = (100 / gameSize) * 100;
-        this.xIni = x;
-        this.yIni = y;
-        this.moveX = 0;
-        this.anm = 0;
+export class Alien extends GameObject {
+
+    constructor(sourceImg, ctx, gameSize, x, y) {
+        super(sourceImg, ctx, gameSize, x, y);
+        this.dirMoveX = 1;
+        this.dirMoveY = 0;
+        this.flagLimit = false;
+
     }
 
-    draw() {
-        this.move();
-    }
 
-    move() {
-        this.ctx.fillStyle = "#ffffff";
-        this.changeDir();
-        this.animate();
-        this.ctx.fillRect(this.xIni + this.moveX - 1, this.yIni - 1, this.height + 3, this.width + 3);
-        this.ctx.drawImage(this.img, this.xIni + this.moveX, this.yIni, this.height, this.width);
-        this.moveX += this.dirMove;
-
+    moveAlien() {
+        this.move(this.dirMove, 0);
     }
 
     changeDir() {
-        if (this.moveX == 30) {
-            this.dirMove = -1;
-            this.yIni += 3;
-            this.ctx.fillRect(this.xIni + this.moveX, this.yIni - 3, this.height + 3, this.width + 3);
+        if (this.posX == (gameSize - 10)) {
+            this.dirMoveX = -1;
+            this.dirMoveY = 3;
+            this.flagLimit = true;
         }
-        if (this.moveX == 0) {
+        if (this.moveX == 10) {
             this.dirMove = 1;
-            this.yIni += 3;
-            this.ctx.fillRect(this.xIni + this.moveX, this.yIni - 3, this.height + 3, this.width + 3);
+            this.dirMoveY = 3;
+            this.flagLimit = true;
+        }
+        if (this.moveX > 0 && this.moveX < (gameSize - 10)) {
+            this.dirMoveY = 0;
         }
     }
 
-    animate() {
-        if (this.anm == 0) {
-            this.anm = 1;
-        } else {
-            this.anm = 0;
-        }
-        this.img.src = this.src[this.anm];
-    }
 }
