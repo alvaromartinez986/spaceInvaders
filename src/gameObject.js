@@ -20,12 +20,14 @@ export class GameObject {
     move(xPos, yPos) {
         this.animate();
         this.ctx.fillStyle = "#FFFFFF";
-        this.ctx.fillRect(this.xPos + xPos, this.yPos + yPos, this.height + 4, this.width + 4);
-        this.ctx.drawImage(this.img, this.xPos + xPos, this.yPos + yPos, this.height, this.width);
+        this.xPos += xPos;
+        this.yPos += yPos
+        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.height + 3, this.width);
+        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.height, this.width);
     }
 
     animate() {
-        if (sourceImg.length != 1) {
+        if (this.sourceImg.length != 1) {
             if (this.stateAnim == 0) {
                 this.stateAnim = 1;
                 this.img.src = this.sourceImg[this.stateAnim];
@@ -33,6 +35,8 @@ export class GameObject {
                 this.stateAnim = 0;
                 this.img.src = this.sourceImg[this.stateAnim];
             }
+        } else {
+            this.img.src = this.sourceImg[this.stateAnim];
         }
     }
 
