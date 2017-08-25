@@ -21,18 +21,18 @@ export class GameSpace {
     }
 
     createShipPlayer() {
-        let srcImgShip = ['assets/ship.png'];
+        let srcImgShip = ['src/assets/ship.png'];
         this.player = new Ship(srcImgShip, this.ctx, this.gameSize, 40, 310, 100);
         this.player.moveShip(0);
     }
 
     createInvaders() {
-        let srcImgInv = ['assets/invaderOne-1.png', 'assets/invaderOne-2.png'];
+        let srcImgInv = ['src/assets/invaderOne-1.png', 'src/assets/invaderOne-2.png'];
         this.groupInvaders = new GroupInvaders(this.ctx, this.gameSize, srcImgInv);
     }
 
     createWalls() {
-        let srcImgWall = ['assets/wall.png'];
+        let srcImgWall = ['src/assets/wall.png'];
         this.wall = [];
         //Numbers of wall
         for (let i = 0; i < 3; i++) {
