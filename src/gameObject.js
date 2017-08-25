@@ -1,12 +1,12 @@
 export class GameObject {
 
-    constructor(sourceImg, ctx, gameSize, x, y) {
+    constructor(sourceImg, ctx, gameSize, x, y, size) {
 
         this.ctx = ctx;
         this.gameSize = gameSize;
 
-        this.height = (100 / gameSize) * 100;
-        this.width = (100 / gameSize) * 100;
+        this.height = (size / gameSize) * size;
+        this.width = (size / gameSize) * size;
 
         this.xPos = x;
         this.yPos = y;
@@ -39,5 +39,4 @@ export class GameObject {
             this.img.src = this.sourceImg[this.stateAnim];
         }
     }
-
 }

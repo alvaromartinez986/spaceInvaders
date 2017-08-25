@@ -18,7 +18,7 @@ export class GroupInvaders {
         let y = 40;
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 4; j++) {
-                this.invader.push(new Alien(srcImg, this.ctx, this.gameSize, x, y));
+                this.invader.push(new Alien(srcImg, this.ctx, this.gameSize, x, y, 100));
                 x += 80;
             }
             y += 30;
