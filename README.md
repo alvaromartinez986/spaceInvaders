@@ -9,12 +9,12 @@ This game use webpack to help to transpilate the ES6, and generate a js file.
 - Run `npm install`
 - Run `npm run build`
 
-# 💪 The game 💪
+## 💪 The game 💪
 
  Open the file spaceInvaders.html in the location src/spaceInvaders.html
  
- ## 📢 Chat 📢
+ ## 📢 Github pages  📢
  
  You can see the page in:
  
- Space Invaders (https://alvaromartinez986.github.io/spaceInvaders/)
+ [Space Invaders](https://alvaromartinez986.github.io/spaceInvaders/)
