@@ -22,7 +22,7 @@ export class GameObject {
         this.ctx.fillStyle = "#FFFFFF";
         this.xPos += xPos;
         this.yPos += yPos
-        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.height + 3, this.width);
+        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.height + 3, this.width + 2);
         this.ctx.drawImage(this.img, this.xPos, this.yPos, this.height, this.width);
     }
 
