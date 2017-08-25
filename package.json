@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"build": "webpack webpack.config.js",
-	"watch": "webpack webpack.config.js --watch"
+    "build": "webpack webpack.config.js",
+    "watch": "webpack webpack.config.js --watch"
   },
   "author": "Alvaro Martinez",
   "license": "MIT",
   "devDependencies": {
+    "gh-pages": "^1.0.0",
     "webpack": "^3.5.5"
   }
 }
