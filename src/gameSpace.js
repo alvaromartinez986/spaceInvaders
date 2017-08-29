@@ -57,6 +57,21 @@ export class GameSpace {
             39: 1 // Right
         }[event.keyCode] || 0;
 
+        let shoot = {
+            32: true // shoot
+        }[event.keyCode] || false;
+
         this.player.moveShip(next_direction);
+
+        if (shoot) {
+            this.player.shoot();
+        }
+    }
+
+
+    setEnemys() {
+        let enemys = [];
+        enemys.concat(this.wall);
+        enemys.concat(this.groupInvaders.getInvaders());
     }
 }

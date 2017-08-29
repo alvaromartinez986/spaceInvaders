@@ -58,4 +58,8 @@ export class GroupInvaders {
             }
         }
     }
+
+    getInvaders() {
+        return this.invader;
+    }
 }
