@@ -6,6 +6,7 @@ window.onload = () => {
     const game = new GameSpace(document.getElementById("spaceGame").getContext('2d'));
     window.onkeydown = game.keypress.bind(game);
     setInterval(() => {
-        game.draw()
+        game.draw();
+        document.getElementById("score").innerHTML = game.getScore();
     }, 100);
 }

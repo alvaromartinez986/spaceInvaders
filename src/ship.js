@@ -1,6 +1,9 @@
 import {
     GameObject
-} from './gameObject'
+} from './gameObject';
+import {
+    Bullet
+} from './bullet';
 
 export class Ship extends GameObject {
 
@@ -22,6 +25,13 @@ export class Ship extends GameObject {
         if (this.xPos < (this.gameSize - 50) && this.xPos > 25) {
             this.move(x, 0);
         }
+    }
+
+    shoot(enemys, game) {
+        let srcImgBullet = ['src/assets/bullet.png'];
+        this.bullet = new Bullet(srcImgBullet, this.ctx, this.gameSize, this.xPos, this.yPos, 50, game);
+        this.bullet.setEnemys(enemys);
+        this.bullet.shootBullet(-1, 10);
     }
 
 }

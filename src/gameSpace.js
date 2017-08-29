@@ -12,10 +12,13 @@ export class GameSpace {
     constructor(ctx) {
         this.ctx = ctx;
         this.gameSize = 350;
+        this.enemys = [];
+        this.score = 0;
+
 
         // Game Interface
         this.ctx.strokeRect(2, 2, this.gameSize, this.gameSize);
-        this.createWalls();
+        //this.createWalls();
         this.createShipPlayer();
         this.createInvaders();
     }
@@ -47,16 +50,33 @@ export class GameSpace {
     }
 
     draw() {
-        this.displayWalls();
+        //this.displayWalls();
         this.groupInvaders.moveInvaders();
     }
 
     keypress(event) {
-        let next_direction = {
+        let nextDirection = {
             37: -1, // Left
             39: 1 // Right
         }[event.keyCode] || 0;
 
-        this.player.moveShip(next_direction);
+        let shoot = {
+            32: true // shoot
+        }[event.keyCode] || false;
+
+        this.player.moveShip(nextDirection);
+
+        if (shoot) {
+            this.player.shoot(this.groupInvaders.getInvaders(), this);
+        }
+    }
+
+    getScore() {
+        return "Score: " + this.score;
+    }
+
+    destroyEnemy(i) {
+        this.score += 10;
+        this.groupInvaders.destroyAlien(i);
     }
 }

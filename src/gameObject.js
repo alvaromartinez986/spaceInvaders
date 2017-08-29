@@ -4,8 +4,9 @@ export class GameObject {
 
         this.ctx = ctx;
         this.gameSize = gameSize;
+        this.ctx.fillStyle = "#FFFFFF";
 
-        this.height = (size / gameSize) * size;
+        this.heigth = (size / gameSize) * size;
         this.width = (size / gameSize) * size;
 
         this.xPos = x;
@@ -19,12 +20,20 @@ export class GameObject {
 
     move(xPos, yPos) {
         this.animate();
-        this.ctx.fillStyle = "#FFFFFF";
         this.xPos += xPos;
-        this.yPos += yPos
-        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.height + 3, this.width + 2);
-        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.height, this.width);
+        this.yPos += yPos;
+        this.draw(xPos, yPos);
     }
+
+    clear() {
+        this.ctx.fillRect(this.xPos, this.yPos, this.heigth + 3, this.width + 2);
+    }
+
+    draw(xPos, yPos) {
+        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.heigth + 3, this.width + 2);
+        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.heigth, this.width);
+    }
+
 
     animate() {
         if (this.sourceImg.length != 1) {
@@ -38,5 +47,21 @@ export class GameObject {
         } else {
             this.img.src = this.sourceImg[this.stateAnim];
         }
+    }
+
+    getXPos() {
+        return this.xPos;
+    }
+
+    getYPos() {
+        return this.yPos;
+    }
+
+    getHeigth() {
+        return this.heigth;
+    }
+
+    getWidth() {
+        return this.width;
     }
 }
