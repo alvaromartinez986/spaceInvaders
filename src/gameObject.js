@@ -6,7 +6,7 @@ export class GameObject {
         this.gameSize = gameSize;
         this.ctx.fillStyle = "#FFFFFF";
 
-        this.height = (size / gameSize) * size;
+        this.heigth = (size / gameSize) * size;
         this.width = (size / gameSize) * size;
 
         this.xPos = x;
@@ -26,12 +26,12 @@ export class GameObject {
     }
 
     clear() {
-        this.ctx.fillRect(this.xPos, this.yPos, this.height + 3, this.width + 2);
+        this.ctx.fillRect(this.xPos, this.yPos, this.heigth + 3, this.width + 2);
     }
 
     draw(xPos, yPos) {
-        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.height + 3, this.width + 2);
-        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.height, this.width);
+        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.heigth + 3, this.width + 2);
+        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.heigth, this.width);
     }
 
 
@@ -57,8 +57,8 @@ export class GameObject {
         return this.yPos;
     }
 
-    getHeight() {
-        return this.height;
+    getHeigth() {
+        return this.heigth;
     }
 
     getWidth() {

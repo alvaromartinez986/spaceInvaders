@@ -20,4 +20,8 @@ export class Wall {
             this.brick[i].move(0, 0);
         }
     }
+
+    getBrick() {
+        return this.brick;
+    }
 }

@@ -27,9 +27,10 @@ export class Ship extends GameObject {
         }
     }
 
-    shoot(enemys) {
-        let srcImgBullet = ['assets/bullet.png'];
-        this.bullet = new Bullet(srcImgBullet, this.ctx, this.gameSize, this.xPos, this.yPos, 50, enemys);
+    shoot(enemys, game) {
+        let srcImgBullet = ['src/assets/bullet.png'];
+        this.bullet = new Bullet(srcImgBullet, this.ctx, this.gameSize, this.xPos, this.yPos, 50, game);
+        this.bullet.setEnemys(enemys);
         this.bullet.shootBullet(-1, 10);
     }
 

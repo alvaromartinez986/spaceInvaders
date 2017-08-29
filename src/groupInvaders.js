@@ -11,12 +11,13 @@ export class GroupInvaders {
         this.moveY = 0;
         this.invader = [];
         this.createInvaders(srcImg);
+        this.score = 0;
     }
 
     createInvaders(srcImg) {
         let x = 40;
         let y = 40;
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 this.invader.push(new Alien(srcImg, this.ctx, this.gameSize, x, y, 100));
                 x += 80;
@@ -28,9 +29,9 @@ export class GroupInvaders {
 
     moveInvaders() {
         this.changeDirInvaders();
-        for (let i = 0; i < this.invader.length; i++) {
-            this.invader[i].move(this.moveX, this.moveY);
-        }
+        this.invader.map(e => {
+            e.move(this.moveX, this.moveY);
+        });
     }
 
     changeDirInvaders() {
@@ -48,18 +49,26 @@ export class GroupInvaders {
         if (flagChange) {
             this.moveY = 4;
 
-            for (let i = 0; i < this.invader.length; i++) {
-                this.invader[i].move(0, this.moveY);
-            }
+            this.invader.map(e => {
+                e.move(0, this.moveY);
+            });
 
             this.moveY = 0;
-            for (let i = 0; i < this.invader.length; i++) {
-                this.invader[i].move(this.moveX, this.moveY);
-            }
+
+            this.invader.map(e => {
+                e.move(this.moveX, this.moveY);
+            });
+
         }
     }
 
     getInvaders() {
         return this.invader;
+    }
+
+    destroyAlien(i) {
+        this.score += 10;
+        this.invader[i].clear();
+        this.invader.splice(i, 1);
     }
 }
