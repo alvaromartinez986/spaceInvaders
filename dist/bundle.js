@@ -74,8 +74,9 @@ class GameObject {
 
         this.ctx = ctx;
         this.gameSize = gameSize;
+        this.ctx.fillStyle = "#FFFFFF";
 
-        this.height = (size / gameSize) * size;
+        this.heigth = (size / gameSize) * size;
         this.width = (size / gameSize) * size;
 
         this.xPos = x;
@@ -89,12 +90,20 @@ class GameObject {
 
     move(xPos, yPos) {
         this.animate();
-        this.ctx.fillStyle = "#FFFFFF";
         this.xPos += xPos;
-        this.yPos += yPos
-        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.height + 3, this.width + 2);
-        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.height, this.width);
+        this.yPos += yPos;
+        this.draw(xPos, yPos);
     }
+
+    clear() {
+        this.ctx.fillRect(this.xPos, this.yPos, this.heigth + 3, this.width + 2);
+    }
+
+    draw(xPos, yPos) {
+        this.ctx.fillRect(this.xPos - xPos, this.yPos - yPos, this.heigth + 3, this.width + 2);
+        this.ctx.drawImage(this.img, this.xPos, this.yPos, this.heigth, this.width);
+    }
+
 
     animate() {
         if (this.sourceImg.length != 1) {
@@ -109,6 +118,22 @@ class GameObject {
             this.img.src = this.sourceImg[this.stateAnim];
         }
     }
+
+    getXPos() {
+        return this.xPos;
+    }
+
+    getYPos() {
+        return this.yPos;
+    }
+
+    getHeigth() {
+        return this.heigth;
+    }
+
+    getWidth() {
+        return this.width;
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = GameObject;
 
@@ -119,7 +144,7 @@ class GameObject {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(2);
-module.exports = __webpack_require__(8);
+module.exports = __webpack_require__(9);
 
 
 /***/ }),
@@ -135,7 +160,8 @@ window.onload = () => {
     const game = new __WEBPACK_IMPORTED_MODULE_0__gameSpace__["a" /* GameSpace */](document.getElementById("spaceGame").getContext('2d'));
     window.onkeydown = game.keypress.bind(game);
     setInterval(() => {
-        game.draw()
+        game.draw();
+        document.getElementById("score").innerHTML = game.getScore();
     }, 100);
 }
 
@@ -147,7 +173,7 @@ window.onload = () => {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__groupInvaders__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ship__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wall__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wall__ = __webpack_require__(8);
 
 
 
@@ -156,10 +182,13 @@ class GameSpace {
     constructor(ctx) {
         this.ctx = ctx;
         this.gameSize = 350;
+        this.enemys = [];
+        this.score = 0;
+
 
         // Game Interface
         this.ctx.strokeRect(2, 2, this.gameSize, this.gameSize);
-        this.createWalls();
+        //this.createWalls();
         this.createShipPlayer();
         this.createInvaders();
     }
@@ -191,17 +220,34 @@ class GameSpace {
     }
 
     draw() {
-        this.displayWalls();
+        //this.displayWalls();
         this.groupInvaders.moveInvaders();
     }
 
     keypress(event) {
-        let next_direction = {
+        let nextDirection = {
             37: -1, // Left
             39: 1 // Right
         }[event.keyCode] || 0;
 
-        this.player.moveShip(next_direction);
+        let shoot = {
+            32: true // shoot
+        }[event.keyCode] || false;
+
+        this.player.moveShip(nextDirection);
+
+        if (shoot) {
+            this.player.shoot(this.groupInvaders.getInvaders(), this);
+        }
+    }
+
+    getScore() {
+        return "Score: " + this.score;
+    }
+
+    destroyEnemy(i) {
+        this.score += 10;
+        this.groupInvaders.destroyAlien(i);
     }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = GameSpace;
@@ -225,12 +271,13 @@ class GroupInvaders {
         this.moveY = 0;
         this.invader = [];
         this.createInvaders(srcImg);
+        this.score = 0;
     }
 
     createInvaders(srcImg) {
         let x = 40;
         let y = 40;
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 this.invader.push(new __WEBPACK_IMPORTED_MODULE_0__alien__["a" /* Alien */](srcImg, this.ctx, this.gameSize, x, y, 100));
                 x += 80;
@@ -242,9 +289,9 @@ class GroupInvaders {
 
     moveInvaders() {
         this.changeDirInvaders();
-        for (let i = 0; i < this.invader.length; i++) {
-            this.invader[i].move(this.moveX, this.moveY);
-        }
+        this.invader.map(e => {
+            e.move(this.moveX, this.moveY);
+        });
     }
 
     changeDirInvaders() {
@@ -262,15 +309,27 @@ class GroupInvaders {
         if (flagChange) {
             this.moveY = 4;
 
-            for (let i = 0; i < this.invader.length; i++) {
-                this.invader[i].move(0, this.moveY);
-            }
+            this.invader.map(e => {
+                e.move(0, this.moveY);
+            });
 
             this.moveY = 0;
-            for (let i = 0; i < this.invader.length; i++) {
-                this.invader[i].move(this.moveX, this.moveY);
-            }
+
+            this.invader.map(e => {
+                e.move(this.moveX, this.moveY);
+            });
+
         }
+    }
+
+    getInvaders() {
+        return this.invader;
+    }
+
+    destroyAlien(i) {
+        this.score += 10;
+        this.invader[i].clear();
+        this.invader.splice(i, 1);
     }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = GroupInvaders;
@@ -317,6 +376,8 @@ class Alien extends __WEBPACK_IMPORTED_MODULE_0__gameObject__["a" /* GameObject 
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gameObject__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(7);
+
 
 
 class Ship extends __WEBPACK_IMPORTED_MODULE_0__gameObject__["a" /* GameObject */] {
@@ -341,6 +402,13 @@ class Ship extends __WEBPACK_IMPORTED_MODULE_0__gameObject__["a" /* GameObject *
         }
     }
 
+    shoot(enemys, game) {
+        let srcImgBullet = ['src/assets/bullet.png'];
+        this.bullet = new __WEBPACK_IMPORTED_MODULE_1__bullet__["a" /* Bullet */](srcImgBullet, this.ctx, this.gameSize, this.xPos, this.yPos, 50, game);
+        this.bullet.setEnemys(enemys);
+        this.bullet.shootBullet(-1, 10);
+    }
+
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Ship;
 
@@ -348,6 +416,76 @@ class Ship extends __WEBPACK_IMPORTED_MODULE_0__gameObject__["a" /* GameObject *
 
 /***/ }),
 /* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gameObject__ = __webpack_require__(0);
+
+
+class Bullet extends __WEBPACK_IMPORTED_MODULE_0__gameObject__["a" /* GameObject */] {
+
+    constructor(sourceImg, ctx, gameSize, x, y, size, game) {
+        super(sourceImg, ctx, gameSize, x, y, size);
+        this.collision = false;
+        this.game = game;
+    }
+
+    shootBullet(direction, velocY) {
+        let transVel = (1 / velocY) * 100;
+        let inter = setInterval(() => {
+            if (!this.collision) {
+                this.move(0, direction);
+                this.setCollision();
+            }
+        }, transVel);
+    }
+
+    setEnemys(enemys) {
+        this.enemys = enemys;
+    }
+
+    setCollision(inter) {
+
+        //Limit down
+        if (this.yPos == (this.gameSize - 25)) {
+            this.collision = true;
+            this.clear();
+        }
+
+        //Limit up
+        if (this.yPos == 15) {
+            this.collision = true;
+            this.clear();
+        }
+
+        // Crash a invader
+        this.enemys = this.enemys.filter((e, i) => {
+            // Get limits of the object collider
+            let limitLeft = e.getXPos() - e.getWidth();
+            let limitRigth = e.getXPos() + e.getWidth();
+            let limitUp = e.getYPos() - e.getHeigth();
+            let limitBottom = e.getYPos() + e.getHeigth();
+
+            // Check if bullet collide with the invader
+            if ((this.xPos > limitLeft && this.xPos < limitRigth) &&
+                (this.yPos < limitBottom && this.yPos > limitUp)) {
+                this.clear();
+                e.clear();
+                this.game.destroyEnemy(i);
+                this.collision = true;
+            } else {
+                return e;
+            }
+
+        });
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Bullet;
+
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -372,16 +510,20 @@ class Wall {
             this.brick[i].move(0, 0);
         }
     }
+
+    getBrick() {
+        return this.brick;
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Wall;
 
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(__dirname) {const path = __webpack_require__(9);
+/* WEBPACK VAR INJECTION */(function(__dirname) {const path = __webpack_require__(10);
 
 module.exports = {
     entry: "./src/index.js",
@@ -394,7 +536,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -622,10 +764,10 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
